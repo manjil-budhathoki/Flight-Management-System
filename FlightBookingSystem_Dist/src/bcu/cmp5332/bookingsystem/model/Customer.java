@@ -7,12 +7,14 @@ public class Customer {
     private final int id;
     private final String name;
     private final String phone;
+    private final String email;
     private final List<Booking> bookings = new ArrayList<>();
 
-    public Customer(int id, String name, String phone) {
+    public Customer(int id, String name, String phone, String email) {
         this.id = id;
         this.name = name;
         this.phone = phone;
+        this.email = email;
     }
 
     public int getId() {
@@ -25,6 +27,10 @@ public class Customer {
 
     public String getPhone() {
         return phone;
+    }
+    
+    public String getEmail() {
+        return email;
     }
 
     public List<Booking> getBookings() {
@@ -50,7 +56,7 @@ public class Customer {
         StringBuilder sb = new StringBuilder();
         sb.append(getDetailsShort()).append("\nBookings:\n");
         for (Booking booking : bookings) {
-            sb.append(" * ").append(booking.getDetailsShort()).append("\n");
+            sb.append(" * ").append(booking.getDetails()).append("\n");
         }
         return sb.toString();
     }

@@ -1,3 +1,6 @@
-1::Abdel-Rahman Tawil::07555555555
-2::Kostas Vlachos::07596454545
-3::JohnDoe::123456789
+1::JohnDoe::123456789::john.doe@email.com
+2::JohnDoe::123456789::john.doe@email.com
+3::JaneDoe::987654321::jane.doe@email.com
+4::Manjil Budhathoki::9702709700::budhathokimanjil@gmail.com
+5::Shankar::9754558253::shankisinthebuilding.in
+6::Ram::12345667::ram123@gmail.com

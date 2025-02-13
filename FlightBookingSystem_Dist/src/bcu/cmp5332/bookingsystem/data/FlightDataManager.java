@@ -22,27 +22,41 @@ public class FlightDataManager implements DataManager {
                 String line = scanner.nextLine();
                 String[] data = line.split(SEPARATOR);
 
+                if (data.length < 5) {
+                    System.err.println("Skipping invalid flight entry: " + line);
+                    continue; // Skip incomplete data
+                }
+
                 int id = Integer.parseInt(data[0]);
                 String flightNumber = data[1];
                 String origin = data[2];
                 String destination = data[3];
-                LocalDate departureDate = LocalDate.parse(data[4]); // FIXED: Parsing LocalDate
+                LocalDate departureDate = LocalDate.parse(data[4]);
 
-                Flight flight = new Flight(id, flightNumber, origin, destination, departureDate);
+                int capacity = (data.length > 5) ? Integer.parseInt(data[5]) : 100; // Default capacity
+                double price = (data.length > 6) ? Double.parseDouble(data[6]) : 200.0; // Default price
+
+                Flight flight = new Flight(id, flightNumber, origin, destination, departureDate, capacity, price);
                 fbs.addFlight(flight);
+                storeData(fbs); // Ensure immediate saving after adding a flight
             }
         }
     }
 
     @Override
     public void storeData(FlightBookingSystem fbs) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME))) {
+        File file = new File(FILE_NAME);
+        file.getParentFile().mkdirs(); // Ensure directories exist
+        
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
             for (Flight flight : fbs.getFlights()) {
                 writer.println(flight.getId() + SEPARATOR +
                                flight.getFlightNumber() + SEPARATOR +
                                flight.getOrigin() + SEPARATOR +
                                flight.getDestination() + SEPARATOR +
-                               flight.getDepartureDate());
+                               flight.getDepartureDate() + SEPARATOR +
+                               flight.getCapacity() + SEPARATOR +
+                               flight.getPrice());
             }
         }
     }

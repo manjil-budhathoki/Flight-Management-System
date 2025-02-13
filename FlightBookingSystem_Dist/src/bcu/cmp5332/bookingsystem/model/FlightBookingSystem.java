@@ -1,7 +1,12 @@
 package bcu.cmp5332.bookingsystem.model;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+
+import javax.swing.JOptionPane;
+
+import bcu.cmp5332.bookingsystem.data.FlightBookingSystemData;
 
 public class FlightBookingSystem {
     private final Map<Integer, Customer> customers = new HashMap<>();
@@ -51,4 +56,40 @@ public class FlightBookingSystem {
         }
         flights.put(flight.getId(), flight);
     }
-}
+
+    // ✅ Fix: Use customers.values() to iterate over the map correctly
+    public List<Booking> getAllBookings() {
+        List<Booking> allBookings = new ArrayList<>();
+
+        for (Customer customer : customers.values()) {  // ✅ Corrected iteration
+            allBookings.addAll(customer.getBookings());
+        }
+
+        return allBookings;
+    }
+    
+    public void storeDataWithRollback() {
+        try {
+            FlightBookingSystemData.store(this); // Save data to files
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error saving data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Data saving failed: " + ex.getMessage());
+            rollbackChanges(); // Restore in-memory data
+        }
+    }
+
+    private void rollbackChanges() {
+        try {
+            // Reload data from files to undo in-memory changes
+            FlightBookingSystem reloadedSystem = FlightBookingSystemData.load();
+            this.customers.clear();
+            this.customers.putAll(reloadedSystem.customers);
+            this.flights.clear();
+            this.flights.putAll(reloadedSystem.flights);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error during rollback: " + ex.getMessage(), "Critical Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Rollback failed: " + ex.getMessage());
+        }
+    }
+    }
+

@@ -1,6 +1,7 @@
 package bcu.cmp5332.bookingsystem.model;
 
 import java.time.LocalDate;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,14 +11,18 @@ public class Flight {
     private final String origin;
     private final String destination;
     private final LocalDate departureDate;
+    private final int capacity;
+    private final double price;
     private final Set<Customer> passengers = new HashSet<>();
 
-    public Flight(int id, String flightNumber, String origin, String destination, LocalDate departureDate) {
+    public Flight(int id, String flightNumber, String origin, String destination, LocalDate departureDate, int capacity, double price) {
         this.id = id;
         this.flightNumber = flightNumber;
         this.origin = origin;
         this.destination = destination;
         this.departureDate = departureDate;
+        this.capacity = capacity;
+        this.price = price;
     }
 
     public int getId() {
@@ -39,13 +44,25 @@ public class Flight {
     public LocalDate getDepartureDate() {
         return departureDate;
     }
+    
+    public int getCapacity() {
+    	return capacity;
+    }
+    
+    public double getPrice() {
+    	return price;
+    }
 
     public Set<Customer> getPassengers() {
         return passengers;
     }
 
     public void addPassenger(Customer customer) {
-        passengers.add(customer);
+        if (passengers.size() < capacity) {
+            passengers.add(customer);
+        } else {
+            throw new IllegalArgumentException("Flight is fully booked!");
+        }
     }
 
     public void removePassenger(Customer customer) {
@@ -54,6 +71,6 @@ public class Flight {
 
     public String getDetailsShort() {
         return "Flight #" + id + ": " + flightNumber + " from " + origin + " to " + destination +
-               " departing on " + departureDate;
+               " departing on " + departureDate + " | Capacity: " + capacity + " | Price: $" + price;
     }
 }

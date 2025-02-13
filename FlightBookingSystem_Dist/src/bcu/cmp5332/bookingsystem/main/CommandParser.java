@@ -15,32 +15,52 @@ public class CommandParser {
 
         String command = scanner.next().toLowerCase();
         switch (command) {
-            case "addcustomer":
-                if (!scanner.hasNext()) throw new IllegalArgumentException("Usage: addcustomer [name] [phone]");
-                String name = scanner.next();
-                if (!scanner.hasNext()) throw new IllegalArgumentException("Usage: addcustomer [name] [phone]");
-                String phone = scanner.next();
-                return new AddCustomer(name, phone);
+        
+	        case "addcustomer":
+	            if (!scanner.hasNext()) throw new IllegalArgumentException("Usage: addcustomer [name] [phone] [email]");
+	            
+	            String name = scanner.next();
+	            String phone = scanner.next();
+	            
+	            if (!scanner.hasNext()) throw new IllegalArgumentException("Usage: addcustomer [name] [phone] [email]");
+	            String email = scanner.next();
+	
+	            return new AddCustomer(name, phone, email);
+
             
             case "listcustomers":
                 return new ListCustomers();
             
             case "addflight":
-                if (!scanner.hasNext()) throw new IllegalArgumentException("Usage: addflight [flightNumber] [origin] [destination] [date]");
+                if (!scanner.hasNext()) throw new IllegalArgumentException("Usage: addflight [flightNumber] [origin] [destination] [date] [capacity] [price]");
+                
                 String flightNumber = scanner.next();
                 String origin = scanner.next();
                 String destination = scanner.next();
-                if (!scanner.hasNext()) throw new IllegalArgumentException("Usage: addflight [flightNumber] [origin] [destination] [date]");
+                
+                if (!scanner.hasNext()) throw new IllegalArgumentException("Usage: addflight [flightNumber] [origin] [destination] [date] [capacity] [price]");
                 String dateStr = scanner.next();
+
+                if (!scanner.hasNextInt()) throw new IllegalArgumentException("Capacity must be an integer.");
+                int capacity = scanner.nextInt();
+
+                if (!scanner.hasNextDouble()) throw new IllegalArgumentException("Price must be a decimal number.");
+                double price = scanner.nextDouble();
+
                 try {
                     LocalDate departureDate = LocalDate.parse(dateStr);
-                    return new AddFlight(flightNumber, origin, destination, departureDate);
+                    return new AddFlight(flightNumber, origin, destination, departureDate, capacity, price);
                 } catch (DateTimeParseException e) {
                     throw new IllegalArgumentException("Invalid date format. Use YYYY-MM-DD.");
                 }
+
             
             case "listflights":
                 return new ListFlights();
+                
+            case "listbookings":
+                return new ListBookings();
+
             
             case "addbooking":
                 if (!scanner.hasNextInt()) throw new IllegalArgumentException("Usage: addbooking [customerId] [flightId]");
@@ -48,6 +68,17 @@ public class CommandParser {
                 if (!scanner.hasNextInt()) throw new IllegalArgumentException("Usage: addbooking [customerId] [flightId]");
                 int flightId = scanner.nextInt();
                 return new AddBooking(customerId, flightId);
+            
+                
+            case "editbooking":
+                if (!scanner.hasNextInt()) throw new IllegalArgumentException("Usage: editbooking [customerId] [newFlightId]");
+                int customerId1 = scanner.nextInt();
+
+                if (!scanner.hasNextInt()) throw new IllegalArgumentException("Usage: editbooking [customerId] [newFlightId]");
+                int newFlightId = scanner.nextInt();
+
+                return new EditBooking(customerId1, newFlightId);
+
             
             case "cancelbooking":
                 if (!scanner.hasNextInt()) throw new IllegalArgumentException("Usage: cancelbooking [customerId] [flightId]");

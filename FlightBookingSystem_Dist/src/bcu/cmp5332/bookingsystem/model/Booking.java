@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Booking {
     private final Customer customer;
-    private final Flight flight;
+    private Flight flight;
     private final LocalDate bookingDate;
 
     public Booking(Customer customer, Flight flight, LocalDate bookingDate) {
@@ -25,7 +25,12 @@ public class Booking {
         return bookingDate;
     }
 
-    public String getDetailsShort() {
-        return "Booking for Flight #" + flight.getId() + " - " + flight.getFlightNumber();
+    public void setFlight(Flight newFlight) {
+        this.flight = newFlight;
+    }
+    public String getDetails() {
+        return "Customer: " + customer.getName() +
+               " | Flight: " + flight.getFlightNumber() +
+               " | Booking Date: " + bookingDate;
     }
 }

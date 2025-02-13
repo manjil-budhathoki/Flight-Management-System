@@ -1,2 +1,4 @@
-1::LH2560::Birmingham::Munich::2022-11-25
-2::FL101::NewYork::London::2024-07-15
+1::LH2560::Birmingham::Munich::2022-11-25::100::200.0
+2::FL001::NewYork::London::2024-07-15::100::500.0
+3::FL001::NewYork::London::2024-07-15::100::500.0
+4::FL002::Paris::Tokyo::2024-07-20::150::750.0
